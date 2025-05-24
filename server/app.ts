@@ -1,6 +1,5 @@
-import 'express-async-errors'
-import dotenv from 'dotenv'
-import express from 'express'
+import express, { Application } from 'express'
+import dotenvFlow from 'dotenv-flow'
 import morgan from 'morgan'
 import cors from 'cors'
 import connectDB from './db/connect.js'
@@ -14,15 +13,17 @@ import cookieParser from 'cookie-parser'
 import fileUpload from 'express-fileupload'
 import products from './routes/products.js'
 
-dotenv.config()
-const app = express()
+dotenvFlow.config()
+
+const app: Application = express()
 
 // middleware
-app.use(morgan('tiny'))
 app.use(express.json())
-app.use(cookieParser('cookieParser'))
 app.use(cors())
 app.use(express.static('./public'))
+
+app.use(morgan('tiny'))
+app.use(cookieParser('cookieParser'))
 app.use(fileUpload())
 
 // routes

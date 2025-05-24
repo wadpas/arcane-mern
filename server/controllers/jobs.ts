@@ -1,6 +1,6 @@
 import { Response } from 'express'
-import { BadRequestError, NotFoundError } from '../errors/index.js'
 import Job from '../models/job.js'
+import APIError from '../utils/api-error.js'
 
 export const getJobs = async (req: any, res: Response): Promise<any> => {
   const { search, status, jobType, sort } = req.query
@@ -63,7 +63,7 @@ export const getJob = async (req: any, res: Response): Promise<any> => {
   const job = await Job.findOne({ _id: jobId, createdBy: userId })
 
   if (!job) {
-    throw new NotFoundError(`No job with id ${jobId}`)
+    throw new APIError(`No job with id ${jobId}`, 404)
   }
 
   res.status(200).json({ job })
@@ -87,7 +87,7 @@ export const updateJob = async (req: any, res: Response): Promise<any> => {
   })
 
   if (!job) {
-    throw new NotFoundError(`No job with id ${jobId}`)
+    throw new APIError(`No job with id ${jobId}`, 404)
   }
 
   res.status(200).json({ job })
@@ -102,7 +102,7 @@ export const deleteJob = async (req: any, res: Response): Promise<any> => {
   const job = await Job.findOneAndDelete({ _id: jobId, createdBy: userId })
 
   if (!job) {
-    throw new NotFoundError(`No job with id ${jobId}`)
+    throw new APIError(`No job with id ${jobId}`, 404)
   }
 
   res.status(200).json({ job })
